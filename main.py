@@ -1,5 +1,6 @@
 import pandas as pd
-from functions import top3_stand_num,plot_top, season_stats
+from functions import top3_stand_num,plot_top, season_stats, animation_plot
+
 
 ## Loading data from csv files
 circuits_data = pd.read_csv("data/circuits.csv")
@@ -18,12 +19,12 @@ sprint_results_data = pd.read_csv("data/sprint_results.csv")
 status_data = pd.read_csv("data/status.csv")
 
 # Drivers stats
-# drivers_stats = drivers_data[["driverId","forename","surname"]]
-# drivers_stats = drivers_stats.merge(top3_stand_num(driver_standings_data),on="driverId")
-# drivers_stats = drivers_stats.loc[:, ~drivers_stats.columns.duplicated()]
-# plot_top(5,drivers_stats,"surname",["First","Second","Third"])
+drivers_stats = drivers_data[["driverId","forename","surname"]]
+drivers_stats = drivers_stats.merge(top3_stand_num(driver_standings_data),on="driverId")
+drivers_stats = drivers_stats.loc[:, ~drivers_stats.columns.duplicated()]
+plot_top(5,drivers_stats,"surname",["First","Second","Third"])
 
 # Title fight animation
-print(season_stats(2022,races_data,drivers_data,driver_standings_data))
-
+season_stats, year = season_stats(2008,races_data,drivers_data,driver_standings_data)
+animation_plot(season_stats, year)
 

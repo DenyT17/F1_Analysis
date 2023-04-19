@@ -2,6 +2,8 @@ import pandas
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import ffmpeg
+import bar_chart_race as bcr
 
 
 
@@ -36,7 +38,44 @@ def season_stats(year:int, races_data : pandas.DataFrame, drivers_data : pandas.
     for driver in table["driverId"].values:
         drivers = pd.concat([drivers,drivers_data[["driverId","driverRef"]].loc[(drivers_data["driverId"]) == driver]])
     drivers = drivers.drop_duplicates().reset_index(drop=True)
-    drivers = drivers.pivot_table(index=None,columns="driverRef",values=None).reset_index(drop=True).drop([0],axis=0)
 
-    return drivers
+    race_number = 1
+    for race in season_results["raceId"].unique():
+        race_stat = season_results.loc[(season_results["raceId"]==race)]
+        new_name = f"Points after {race_number} races"
+        race_stat = race_stat.rename(columns={"points":new_name})
+        drivers = pd.merge(drivers,race_stat[["driverId",new_name]],how='outer',on = "driverId")
+        race_number+=1
+    drivers = drivers.drop(["driverId"],axis=1)
+    drivers = drivers.set_index("driverRef")
+    drivers = drivers.fillna(0).T
+    return drivers, year
 
+def animation_plot(data : pandas.DataFrame,  year : int):
+    bcr.bar_chart_race(
+        df=data,
+        filename=f'Title fight animation - {year} season.mp4',
+        orientation='h',
+        sort='desc',
+        n_bars=10,
+        fixed_order=False,
+        fixed_max=True,
+        steps_per_period=10,
+        interpolate_period=False,
+        label_bars=True,
+        bar_size=.95,
+        period_label={'x': .99, 'y': .25, 'ha': 'right', 'va': 'center'},
+        period_length=500,
+        figsize=(5, 3),
+        dpi=50,
+        cmap='dark12',
+        title=f'Title fight animation - {year} season',
+        title_size='',
+        bar_label_size=7,
+        tick_label_size=7,
+        shared_fontdict={'family': 'Helvetica', 'color': '.1'},
+        scale='linear',
+        writer=None,
+        fig=None,
+        bar_kwargs={'alpha': .7},
+        filter_column_colors=False)
