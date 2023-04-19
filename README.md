@@ -26,6 +26,6 @@ Dataset consists of several csv files, the dependencies between the files are sh
 
 
 ## Next goals 🏆⌛
-* Adding new columns and Dataframe based on existing data. 
+* Adding function to download drivers image from wikipedia url. 
 
 
