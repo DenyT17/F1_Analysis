@@ -2,10 +2,9 @@ import pandas
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import ffmpeg
+import urllib
 import bar_chart_race as bcr
-
-
+import requests, os
 
 
 ## Function calculating the number of places on the podium for each competitor
@@ -51,6 +50,29 @@ def season_stats(year:int, races_data : pandas.DataFrame, drivers_data : pandas.
     drivers = drivers.fillna(0).T
     return drivers, year
 
+#Function to downloading main wikipedia image at every driver
+def download_img(drivers_data : pandas.DataFrame):
+    os.makedirs("data/Drivers Image", exist_ok=True)
+    i = 1
+    query = 'http://en.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&piprop=original&titles='
+
+    for index, row in drivers_data.iterrows():
+        if os.path.isfile(f"data/Drivers Image/{row['driverRef']}.jpg"):
+            print(f"data/Drivers Image/{row['driverRef']}.jpg - existing")
+        else:
+            try:
+                api_res = requests.get(query + row["url"].split("wiki/",1)[1]).json()
+
+                first_part = api_res['query']['pages']
+                for key, value in first_part.items():
+                    if (value['original']['source']):
+                        data = value['original']['source']
+            except Exception as exc:
+                data = "https://snworksceo.imgix.net/dtc/3f037af6-87ce-4a37-bb37-55b48029727d.sized-1000x1000.jpg?w=1000"
+            urllib.request.urlretrieve(data, f"data/Drivers Image/{row['driverRef']}.jpg")
+            print(f"{row['driverRef']} image downloaded  \n {i}/{len(drivers_data.index)}")
+        i+=1
+
 def animation_plot(data : pandas.DataFrame,  year : int):
     bcr.bar_chart_race(
         df=data,
@@ -67,7 +89,7 @@ def animation_plot(data : pandas.DataFrame,  year : int):
         period_label={'x': .99, 'y': .25, 'ha': 'right', 'va': 'center'},
         period_length=500,
         figsize=(5, 3),
-        dpi=50,
+        dpi=320,
         cmap='dark12',
         title=f'Title fight animation - {year} season',
         title_size='',

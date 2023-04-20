@@ -1,5 +1,5 @@
 import pandas as pd
-from functions import top3_stand_num,plot_top, season_stats, animation_plot
+from functions import top3_stand_num,plot_top, season_stats, animation_plot, download_img
 
 
 ## Loading data from csv files
@@ -28,3 +28,5 @@ plot_top(5,drivers_stats,"surname",["First","Second","Third"])
 season_stats, year = season_stats(2008,races_data,drivers_data,driver_standings_data)
 animation_plot(season_stats, year)
 
+# Downloading main wikipedia image at every driver
+# download_img(drivers_data)
