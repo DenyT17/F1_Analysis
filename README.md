@@ -26,6 +26,7 @@ Dataset consists of several csv files, the dependencies between the files are sh
 
 
 ## Next goals 🏆⌛
-* Adding function to download drivers image from wikipedia url. 
+* Adding functionality to taking into account the scores for sprints and the fastest lap
+* Creating plot showing changing max speed through years
 
 
