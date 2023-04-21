@@ -10,7 +10,7 @@
 ![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white)
 
 ## Description 
-
+In this project I will analyze F1 dataset. I will try to create animated graph and functions thanks to which I will can gain intresting information. 
 
 I will regularly upload new version of project with new functionality. 
 
