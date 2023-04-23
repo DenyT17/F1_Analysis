@@ -1,7 +1,5 @@
 # F1 Analysis 🏎
-![formula1-f1](https://user-images.githubusercontent.com/122997699/233154698-fa1277e8-371d-4ff0-afbf-47dbcbe0b6af.gif)
-
-
+![F1](https://media.tenor.com/aMHXRvhc5E0AAAAd/universal-f1-intro.gif)
 
 ## Technologies 💡
 ![PyCharm](https://img.shields.io/badge/pycharm-143?style=for-the-badge&logo=pycharm&logoColor=black&color=black&labelColor=green)
