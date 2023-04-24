@@ -103,12 +103,11 @@ def animation_plot(data : pandas.DataFrame,  year : int):
         filter_column_colors=False)
 
 # Number of constructors points over the years
-# def constructors_points(results_data : pandas.DataFrame, race_data : pandas.DataFrame):
-#     constructors = pd.merge(race_data[["raceId","year"]],results_data[["raceId","constructorId","points"]],
-#                             how='outer',on = "raceId")
-#     constructors = constructors.dropna()
-#     constructors = constructors.sort_values(by= ["year","raceId"])
-#     for raceId in constructors["raceId"].values:
-#         for constructorId in constructors["constructorId"]:
-#
-#     return constructors
+def constructors_points(results_data : pandas.DataFrame, race_data : pandas.DataFrame):
+    constructors = pd.merge(race_data[["raceId","date"]],results_data[["raceId","constructorId","points"]],
+                            how='outer',on = "raceId")
+    constructors = constructors.dropna()
+    constructors = constructors.sort_values(by= ["date","raceId"])
+    constructors['sum'] = constructors.groupby(['constructorId'])['points'].cumsum()
+
+    return constructors
