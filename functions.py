@@ -72,7 +72,7 @@ def download_img(drivers_data : pandas.DataFrame):
             urllib.request.urlretrieve(data, f"data/Drivers Image/{row['driverRef']}.jpg")
             print(f"{row['driverRef']} image downloaded  \n {i}/{len(drivers_data.index)}")
         i+=1
-
+#
 def animation_plot(data : pandas.DataFrame,  year : int):
     bcr.bar_chart_race(
         df=data,
@@ -101,3 +101,14 @@ def animation_plot(data : pandas.DataFrame,  year : int):
         fig=None,
         bar_kwargs={'alpha': .7},
         filter_column_colors=False)
+
+# Number of constructors points over the years
+# def constructors_points(results_data : pandas.DataFrame, race_data : pandas.DataFrame):
+#     constructors = pd.merge(race_data[["raceId","year"]],results_data[["raceId","constructorId","points"]],
+#                             how='outer',on = "raceId")
+#     constructors = constructors.dropna()
+#     constructors = constructors.sort_values(by= ["year","raceId"])
+#     for raceId in constructors["raceId"].values:
+#         for constructorId in constructors["constructorId"]:
+#
+#     return constructors
