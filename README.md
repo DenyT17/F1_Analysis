@@ -1,7 +1,5 @@
 # F1 Analysis 🏎
-![formula1-f1](https://user-images.githubusercontent.com/122997699/233154698-fa1277e8-371d-4ff0-afbf-47dbcbe0b6af.gif)
-
-
+![F1](https://media.tenor.com/aMHXRvhc5E0AAAAd/universal-f1-intro.gif)
 
 ## Technologies 💡
 ![PyCharm](https://img.shields.io/badge/pycharm-143?style=for-the-badge&logo=pycharm&logoColor=black&color=black&labelColor=green)
@@ -10,7 +8,7 @@
 ![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white)
 
 ## Description 
-
+In this project I will analyze F1 dataset. I will try to create animated graph and functions thanks to which I will can gain intresting information. 
 
 I will regularly upload new version of project with new functionality. 
 
@@ -26,6 +24,7 @@ Dataset consists of several csv files, the dependencies between the files are sh
 
 
 ## Next goals 🏆⌛
-* Adding function to download drivers image from wikipedia url. 
-
+* Adding functionality to taking into account the scores for sprints and the fastest lap
+* Creating plot showing changing max speed through years
+* Creating plot showing changing of number of wins each team through years
 
