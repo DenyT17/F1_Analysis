@@ -103,11 +103,57 @@ def animation_plot(data : pandas.DataFrame,  year : int):
         filter_column_colors=False)
 
 # Number of constructors points over the years
-def constructors_points(results_data : pandas.DataFrame, race_data : pandas.DataFrame):
+def constructors_points(results_data : pandas.DataFrame,
+                        race_data : pandas.DataFrame,
+                        constructors_data : pandas.DataFrame):
     constructors = pd.merge(race_data[["raceId","date"]],results_data[["raceId","constructorId","points"]],
                             how='outer',on = "raceId")
     constructors = constructors.dropna()
-    constructors = constructors.sort_values(by= ["date","raceId"])
+    constructors = constructors.sort_values(by= ["date","raceId","constructorId","points"])
     constructors['sum'] = constructors.groupby(['constructorId'])['points'].cumsum()
+    constructors = constructors.drop_duplicates(subset=["raceId","date","constructorId"],keep='last')
+    constructors = constructors.drop(["points", "raceId"], axis=1)
+    constructors = pd.merge(constructors, constructors_data[["constructorId","name"]],how='outer',on = "constructorId")
+    constructors = constructors.drop(["constructorId"],axis=1)
+    constructors = constructors.pivot_table(index='date', columns='name', values='sum')
+    constructors = constructors.fillna(value=0)
+    max = 0
+    for data in constructors.columns.values:
+        for index, row in constructors.iterrows():
+            if max < row[data]:
+                max = row[data]
+            if row[data] == 0:
+                row[data] = max
+        max = 0
+    print(constructors)
+    bcr.bar_chart_race(
+        df=constructors,
+        filename=f'Constructor points.mp4',
+        orientation='h',
+        sort='desc',
+        n_bars=10,
+        fixed_order=False,
+        fixed_max=True,
+        steps_per_period=10,
+        interpolate_period=False,
+        label_bars=True,
+        bar_size=.95,
+        period_label={'x': .99, 'y': .25, 'ha': 'right', 'va': 'center'},
+        period_length=500,
+        figsize=(5, 3),
+        dpi=320,
+        cmap='dark12',
+        title=f'# Number of constructors points over the years',
+        title_size='',
+        bar_label_size=7,
+        tick_label_size=7,
+        shared_fontdict={'family': 'Helvetica', 'color': '.1'},
+        scale='linear',
+        writer=None,
+        fig=None,
+        bar_kwargs={'alpha': .7},
+        filter_column_colors=False)
 
-    return constructors
+
+
+

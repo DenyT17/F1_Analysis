@@ -32,5 +32,4 @@ status_data = pd.read_csv("data/status.csv")
 # print(season_stats)
 # animation_plot(season_stats, year)
 
-print(constructors_points(results_data,races_data))
-
+constructors_points(results_data,races_data,constructors_data)
