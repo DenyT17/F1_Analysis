@@ -141,7 +141,7 @@ def constructors_points(results_data : pandas.DataFrame,
         label_bars=True,
         bar_size=.90,
         period_label={'x': .8, 'y': .10, 'ha': 'right', 'va': 'center'},
-        period_fmt='Year : {}',
+        period_fmt='Year : {x:.0f}',
         period_length=600,
         figsize=(8, 5),
         dpi=320,
@@ -172,3 +172,59 @@ def best_lap_time(circuits : pandas.DataFrame,
     best_time = best_time.dropna()
     plt.plot(best_time["year"],best_time["milliseconds"])
     plt.show()
+
+
+def drivers_points(results_data : pandas.DataFrame,
+                        race_data : pandas.DataFrame,
+                        drivers_data : pandas.DataFrame):
+    drivers = pd.merge(race_data[["raceId","year"]],results_data[["raceId","driverId","points"]],
+                            how='outer',on = "raceId")
+    drivers = drivers.dropna()
+    drivers = drivers.sort_values(by= ["year","raceId","driverId","points"])
+    drivers['sum'] = drivers.groupby(['driverId'])['points'].cumsum()
+    drivers = drivers.drop_duplicates(subset=["raceId","year","driverId"],keep='last')
+    drivers = drivers.drop(["points", "raceId"], axis=1)
+    drivers = pd.merge(drivers, drivers_data[["driverId","driverRef"]],how='outer',on = "driverId")
+    drivers = drivers.drop(["driverId"],axis=1)
+    drivers = drivers.dropna()
+
+    drivers["year"] = drivers["year"].astype(np.int64)
+    drivers = drivers.pivot_table(index='year', columns='driverRef', values='sum')
+    drivers = drivers.fillna(value=0)
+    max = 0
+    for data in drivers.columns.values:
+        for index, row in drivers.iterrows():
+            if max < row[data]:
+                max = row[data]
+            if row[data] == 0:
+                row[data] = max
+        max = 0
+    print(drivers)
+    bcr.bar_chart_race(
+        df=drivers,
+        filename=f'Summary number of drivers points over the years.mp4',
+        orientation='h',
+        sort='desc',
+        n_bars=10,
+        fixed_order=False,
+        fixed_max=False,
+        steps_per_period=10,
+        interpolate_period=False,
+        label_bars=True,
+        bar_size=.90,
+        period_label={'x': .8, 'y': .10, 'ha': 'right', 'va': 'center'},
+        period_fmt='Year : {x:.0f}',
+        period_length=600,
+        figsize=(8, 5),
+        dpi=320,
+        cmap='dark12',
+        title=f'Summary number of drivers points over the years',
+        title_size='',
+        bar_label_size=7,
+        tick_label_size=7,
+        shared_fontdict={'family': 'Helvetica', 'color': '.1'},
+        scale='linear',
+        writer=None,
+        fig=None,
+        bar_kwargs={'alpha': .7},
+        filter_column_colors=False)
