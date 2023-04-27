@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import urllib
 import bar_chart_race as bcr
 import requests, os
-
+import datetime
 
 ## Function calculating the number of places on the podium for each competitor
 def top3_stand_num(data : pandas.DataFrame):
@@ -157,5 +157,18 @@ def constructors_points(results_data : pandas.DataFrame,
         bar_kwargs={'alpha': .2, 'ec': 'black', 'lw': 3},
         filter_column_colors=False)
 
+def best_lap_time(circuits : pandas.DataFrame,
+                  races : pandas.DataFrame,
+                  lap_times : pandas.DataFrame):
+    races_data = races.loc[(races["circuitId"] == 18)]
+    races_data = races_data[["raceId","year"]]
+    lap = pd.DataFrame()
+    for raceId in races_data["raceId"].values:
+        lap = pd.concat([lap, lap_times[["raceId","milliseconds"]].loc[(lap_times["raceId"]) == raceId]])
 
-
+    lap = lap.groupby(["raceId"]).min()
+    best_time = pd.merge(races_data,lap,how='outer',on = "raceId")
+    best_time = best_time.sort_values(by="year")
+    best_time = best_time.dropna()
+    plt.plot(best_time["year"],best_time["milliseconds"])
+    plt.show()
